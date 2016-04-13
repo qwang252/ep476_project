@@ -76,9 +76,9 @@ def naca4gen(iaf,is_FiniteTE,npanels=30):
        #xLEcenter=afrLE*math.cos(theta_le)
        #yLEcenter=afrLE*math.sin(theta_le)
        
-       # need to develop later
        # write data into file
-       #FileHeader='NACA'+' iaf'+' airfoil'+'.dat'
+       FileHeader='NACA '+iaf+' airfoil'+'.dat'
+       
        afxx=[]
        afzz=[]
        for i in range(0,len(afx)):
@@ -86,7 +86,13 @@ def naca4gen(iaf,is_FiniteTE,npanels=30):
            afzz.append(afz[i,0])
        afxx=np.array(afxx)
        afzz=np.array(afzz)
-       
+       Write_File_Name = 'NACA_'+iaf +'_airfoil.'+'dat'
+       target = open(Write_File_Name, 'w')
+       target.write('x indices'+'        '+'z indices'+'\n')
+       for i in range(0,len(afxx)):
+           target.write(str(afxx[i])+'    '+str(afzz[i]))
+           target.write('\n')
+           
        return afxx, afzz     
        
             
