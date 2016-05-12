@@ -1,11 +1,19 @@
-""" NACA4_af class represents specific NACA airfoil shapes in 2D space"""
+""" NACA4_af class represents specific NACA airfoil shapes in 2D space
+    unsymmetrical represents 4 digit unsymmetrical NACA airfoil
+..  moduleauthor::Qingquan Wang <qwang252@wisc.edu>
+""" 
 import numpy as np
 import math
-""" 4_symmetrical represents 4 digit unsymmetrical NACA airfoil""" 
 class unsymmetrical(object):
+
   def __init__(self,name,is_FiniteTE,npanels=30):
+  # iaf represents specific 4 digit NACA airfoil 
     self.iaf = name
+  # is_FiniteTE represents the finite or infinite trailing edge
+  # if finite trailing edge, is_FiniteTE = 1 otherwise = 0
     self.is_FiniteTE = is_FiniteTE
+  # npanels represents number of panels on each side of the airfoil
+  # default value of npanels is 30
     self.npanels = npanels    
   def indices_generate(self):
     # iaf is a string input
@@ -57,17 +65,20 @@ class unsymmetrical(object):
        
        xl=x+yt*np.sin(theta)
        yl=zc-yt*np.cos(theta)
-       
+      # generate indices for each panel
+      # afx represents x indices in 2D space 
        afx=np.concatenate((np.flipud(xu),xl[1::]),axis=0)
+      # afz represents y indices in 2D space
        afz=np.concatenate((np.flipud(yu),yl[1::]),axis=0)
        indices=np.array([[afx[i,0],afz[i,0]] for i in range(0,len(afx))])
        return indices
   def midpts(self,indices):
+      # calculate mid point for each panel
       n=len(indices)
       midpts=np.array([[(indices[0+i]+indices[-n+1+i])/2][0] for i in range(0,len(indices))])
       return midpts   
   def write_in_file(self,indices):
-      # write data into file
+      # write data into file 
        afxx=[]
        afzz=[]
        for i in range(0,len(indices)):
@@ -76,7 +87,7 @@ class unsymmetrical(object):
        
        Write_File_Name = 'NACA_'+self.iaf +'_airfoil.'+'dat'
        target = open(Write_File_Name, 'w')
-       target.write('x indices'+'        '+'z indices'+'\n')
+       target.write('x indices'+'        '+'y indices'+'\n')
        for i in range(0,len(afxx)):
            target.write(str(afxx[i])+'    '+str(afzz[i]))
            target.write('\n')
