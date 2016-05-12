@@ -1,4 +1,5 @@
-#vortex_panel function represents vortex panel method in aerodynamics
+"""vortex_panel represents vortex panel method in aerodynamics
+...moduleauthor::Qingquan Wang<qwang252@wisc.edu>, Yang Lou<lou9@wisc.edu>"""
 from flat_panel_velocity import vortex_panel_velocity as fvpv
 import numpy as np
 import math 
