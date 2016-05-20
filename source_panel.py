@@ -1,6 +1,7 @@
 """source_panel represents source panel method in aerodynamics
 ...moduleauthor::Qingquan Wang<qwang252@wisc.edu>, Yang Lou<lou9@wisc.edu>"""
 from flat_panel_velocity import source_panel_velocity as fspv
+import truncation_plotter as tp
 import numpy as np
 import math
 # source_panel function returns cl and cd for specific airfoil
@@ -9,10 +10,10 @@ def source_panel(af,rho_infinity,P_infinity,v_infinity,angle_attack):
     v_freestream=v_infinity*np.array([math.cos(angle_attack),math.sin(angle_attack),0])
    # set indices,mid points,unit normal vector and unit tangential vector  
    # of each panel for specific airfoil
-    indices = truncation_plotter(af)[0]
-    midpt = truncation_plotter(af)[1]
-    n_hat = truncation_plotter(af)[2]
-    t_hat = truncation_plotter(af)[3]
+    indices = tp.truncation_plotter(af)[0]
+    midpt = tp.truncation_plotter(af)[1]
+    n_hat = tp.truncation_plotter(af)[2]
+    t_hat = tp.truncation_plotter(af)[3]
    # normal velocity at the midpt for each panel 
     N = normal_velocity(indices,midpt,n_hat)
 
@@ -40,29 +41,6 @@ def source_panel(af,rho_infinity,P_infinity,v_infinity,angle_attack):
     Cl = LIFT/rho_infinity/v_infinity**2*2
     Cd = DRAG/rho_infinity/v_infinity**2/A_af*2/mean_y
     return Cl,Cd
-
-# this function is to plot truncation for specific airfoil with indicated 
-# indices, mid points(control points), unit normal and tangential vector 
-def truncation_plotter(af):
-
-    indices = af.indices_generate()
-    
-    n=len(indices)
-    indices = np.array([[indices[i,0],indices[i,1],0] for i in range(0,n)])
-
-   # define normal and tangential directions for each panel
-    indices_2 = np.concatenate((indices,np.array([indices[0]])),axis=0)
-
-    length_panel = np.linalg.norm(np.diff(indices_2,axis=0),axis=1)
-    t_hat = np.dot(np.diag(1/length_panel),np.diff(indices_2,axis=0))
-
-    z_hat = np.array([0,0,1])
-    z_hat = np.tile(z_hat,(n,1))
-
-    n_hat = np.cross(z_hat,t_hat)
-   # define midpoints for each panel
-    midpt = af.midpts(indices)
-    return indices,midpt,n_hat,t_hat,length_panel
 
 # calculate normal velocity at midpt of each panel
 def normal_velocity(indices,midpt,n_hat):
