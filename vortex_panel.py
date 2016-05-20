@@ -1,14 +1,15 @@
 """vortex_panel represents vortex panel method in aerodynamics
 ...moduleauthor::Qingquan Wang<qwang252@wisc.edu>, Yang Lou<lou9@wisc.edu>"""
 from flat_panel_velocity import vortex_panel_velocity as fvpv
+import truncation_plotter as tp
 import numpy as np
 import math 
 def vortex_panel(af,rho_infinity,P_infinity,v_infinity,angle_attack):
     v_freestream=v_infinity*np.array([math.cos(angle_attack),math.sin(angle_attack),0])
-    indices = truncation_plotter(af)[0]
-    midpt = truncation_plotter(af)[1]
-    n_hat = truncation_plotter(af)[2]
-    t_hat = truncation_plotter(af)[3]
+    indices = tp.truncation_plotter(af)[0]
+    midpt = tp.truncation_plotter(af)[1]
+    n_hat = tp.truncation_plotter(af)[2]
+    t_hat = tp.truncation_plotter(af)[3]
     #normal velocity 
     N = normal_velocity(indices,midpt,n_hat)
 
